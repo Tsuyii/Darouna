@@ -1,7 +1,7 @@
 // Mock data for UI preview — controlled by VITE_MOCK_DATA=true
 // To remove: vercel env rm VITE_MOCK_DATA production && git push
 
-export const MOCK = import.meta.env.VITE_MOCK_DATA === 'true'
+export const MOCK = import.meta.env.VITE_MOCK_DATA?.trim() === 'true'
 
 export const mockSyndic = {
   building: { id: 'mock-1', name: 'Résidence Al-Andalus' },
