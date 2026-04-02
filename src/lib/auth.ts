@@ -24,17 +24,17 @@ export interface ApiResponse<T> {
 
 export const authApi = {
   login: (email: string, password: string) =>
-    api.post<ApiResponse<LoginResponse>>('/api/auth/login', { email, password }),
+    api.post<ApiResponse<LoginResponse>>('/api/v1/auth/login', { email, password }),
 
   register: (name: string, email: string, password: string, phone: string, role: string) =>
-    api.post<ApiResponse<LoginResponse>>('/api/auth/register', { name, email, password, phone, role }),
+    api.post<ApiResponse<LoginResponse>>('/api/v1/auth/register', { name, email, password, phone, role }),
 
   logout: (refreshToken: string) =>
-    api.post('/api/auth/logout', { refreshToken }),
+    api.post('/api/v1/auth/logout', { refreshToken }),
 
   refresh: (refreshToken: string) =>
-    api.post<ApiResponse<{ accessToken: string }>>('/api/auth/refresh-token', { refreshToken }),
+    api.post<ApiResponse<{ accessToken: string }>>('/api/v1/auth/refresh-token', { refreshToken }),
 
   me: () =>
-    api.get<ApiResponse<User>>('/api/auth/me'),
+    api.get<ApiResponse<User>>('/api/v1/auth/me'),
 }
