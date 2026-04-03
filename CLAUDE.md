@@ -562,7 +562,7 @@ All features are fully implemented on the backend. Frontend only needs to call t
 | Resident home dashboard | ✅ | ✅ Done |
 | Gardien dashboard + task list | ✅ | ✅ Done |
 | Navigation shell (3 roles) | — | ✅ Done |
-| Buildings & apartments (Syndic Units) | ✅ | ✅ Done (Phase 2) |
+| Buildings & apartments (Syndic Units) | ✅ | ⏳ Phase 2 next (placeholder only, not built) |
 | Syndic Tasks (approve/reject) | ✅ | ⏳ Phase 2 next |
 | Syndic Finance (charges/payments) | ✅ | ⏳ Phase 2 next |
 | Resident Properties | ✅ | ⏳ Phase 2 next |
@@ -572,3 +572,66 @@ All features are fully implemented on the backend. Frontend only needs to call t
 | Votes | ✅ | ⏳ Phase 3 |
 | Notifications | ✅ | ⏳ Phase 3 |
 | Budgets & reports | ✅ | ⏳ Phase 3 |
+
+---
+
+## QA Audit — 2026-04-03
+
+Full browser audit via Puppeteer (gstack/browse) against production:
+`https://darouna-frontend-git-main-dctsuyi3-7221s-projects.vercel.app`
+
+### Role: Syndic
+
+| Route | Status | Notes |
+|-------|--------|-------|
+| `/` (role select) | ✅ OK | Loads cleanly, role cards work, CTA correct |
+| `/login/syndic` | ✅ OK | Form works, backend cold-start ~8s on Render free tier |
+| `/syndic` (dashboard) | ✅ OK | Real data: 100% collection, 72,000 MAD revenue, 5 open tasks, Résidence Al-Andalus |
+| `/syndic/units` | ⚠️ Placeholder | Phase 2 stub — no data shown (CLAUDE.md status corrected) |
+| `/syndic/tasks` | ⚠️ Placeholder | Phase 2 stub |
+| `/syndic/finance` | ⚠️ Placeholder | Phase 2 stub |
+| Role guard (→ /resident) | ✅ OK | Redirects to /syndic correctly |
+| Avatar tap | ✅ OK | Navigates to /syndic dashboard |
+| Logout button | ✅ OK | Returns to role select |
+
+### Role: Resident
+
+| Route | Status | Notes |
+|-------|--------|-------|
+| `/login/resident` | ✅ OK | Logs in correctly |
+| `/resident` (dashboard) | ✅ OK | Real data: 3,600 MAD balance, 3 announcements in Building Feed |
+| `/resident/properties` | ⚠️ Placeholder | Phase 2 stub |
+| `/resident/ledger` | ⚠️ Placeholder | Phase 2 stub |
+| `/resident/support` | ⚠️ Placeholder | Phase 2 stub |
+| Role guard (→ /syndic) | ✅ OK | Redirects to /resident correctly |
+| Logout button | ✅ OK | Returns to role select |
+
+### Role: Gardien
+
+| Route | Status | Notes |
+|-------|--------|-------|
+| `/login/gardien` | ✅ OK | Logs in correctly |
+| `/gardien` (dashboard) | ✅ OK | Real data: 8 total tasks, 3 pending, 2 in-progress, 3 completed; Résidence Al-Andalus |
+| `/gardien/tasks` | ✅ OK | Live tasks with functional Pause/Submit/Start Task buttons |
+| `/gardien/finance` | ⚠️ Placeholder | Phase 2 stub |
+| `/gardien/menu` | ❌ → ✅ FIXED | Was missing route → catch-all sent user to role select. Fixed: added GardienMenu page + route |
+
+### Console Errors (all roles)
+
+All errors observed were from Vercel's deployment-protection layer (401/403) and Google FedCM (deprecated API). Zero app-level JS errors across all roles and pages.
+
+### Fixes Applied (2026-04-03)
+
+| # | Severity | Issue | Fix |
+|---|----------|-------|-----|
+| 1 | 🔴 High | Gardien Menu tab navigates to `/` (no route for `/gardien/menu`) | Created `src/pages/gardien/Menu.tsx` + added route in `router/index.tsx` |
+| 2 | 🟡 Medium | CLAUDE.md incorrectly marked Syndic Units as ✅ Done | Corrected status to ⏳ Phase 2 next |
+
+### Prioritized Fix List (remaining)
+
+1. **Phase 2 — Build Syndic Units page** — most visible gap; data exists in backend
+2. **Phase 2 — Build Syndic Tasks (approve/reject)** — 1 task awaiting approval in seed data
+3. **Phase 2 — Build Resident Ledger** — resident has 3,600 MAD outstanding, no way to see history
+4. **Phase 2 — Build Resident Support** — complaints exist in DB, no UI to view them
+5. **Phase 2 — Build Syndic Finance** — charges and payments exist, no way to manage
+6. **Phase 2 — Build Resident Properties** — apartment details (1A, Résidence Al-Andalus) not accessible
