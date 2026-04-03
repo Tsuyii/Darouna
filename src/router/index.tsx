@@ -14,6 +14,7 @@ import ResidentSupport from '../pages/resident/Support'
 import GardienDashboard from '../pages/gardien/Dashboard'
 import GardienTasks from '../pages/gardien/Tasks'
 import GardienFinance from '../pages/gardien/Finance'
+import GardienMenu from '../pages/gardien/Menu'
 import DashboardLayout from '../components/layout/DashboardLayout'
 
 function RoleGuard({
@@ -62,6 +63,7 @@ export default function AppRouter() {
         <Route index element={<GardienDashboard />} />
         <Route path="tasks" element={<GardienTasks />} />
         <Route path="finance" element={<GardienFinance />} />
+        <Route path="menu" element={<GardienMenu />} />
       </Route>
 
       {/* Catch-all */}
