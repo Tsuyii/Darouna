@@ -457,6 +457,18 @@ VITE_MOCK_DATA=true   # set to 'true' to use mock data (bypasses live API calls)
 
 ---
 
+## MongoDB Atlas (Backend DB)
+
+- **User:** `darouna_user`
+- **Password:** `Darouna2026x`
+- **Cluster:** `cluster0.pks5dvg.mongodb.net`
+- **Connection string:** `mongodb+srv://darouna_user:Darouna2026x@cluster0.pks5dvg.mongodb.net/darouna?retryWrites=true&w=majority`
+- Connection verified working as of 2026-04-03.
+
+> Used by the backend (`residence-app-backend`). Set as `MONGODB_URI` in the backend's environment (Render).
+
+---
+
 ## Commands
 
 ```bash
@@ -474,6 +486,67 @@ npm run preview  # Preview build
 - Commit messages should describe **what was built**, not what files were changed
 - Remote: `origin` → `https://github.com/Tsuyii/darouna-sgir-frontend`
 - Always create or update CHANGELOG.md with today's date and a summary of what was built before the final commit
+
+---
+
+## Test Accounts (seeded 2026-04-03, live on Atlas)
+
+All three accounts verified working against `https://darouna-sgir-backend.onrender.com`.
+
+| Email | Password | Role | Notes |
+|-------|----------|------|-------|
+| `syndic@test.com` | `Password123!` | syndic | No building ref (syndic manages buildings, not assigned to one) |
+| `resident@test.com` | `Password123!` | resident | Apt 1A, Résidence Al Andalus |
+| `gardien@test.com` | `Password123!` | gardien | Assigned to Résidence Al Andalus |
+
+> **Gotcha — in-memory rate limiter:** The backend's `loginAttempts` object lives in-process memory.
+> After 5 failed attempts per email it blocks indefinitely until the Render dyno restarts.
+> If you're locked out, push any commit to the backend repo to trigger a redeploy.
+
+---
+
+## Mock Data (seeded 2026-04-03)
+
+Seed script: `residence-app-backend/scripts/seed.js` — run with `node scripts/seed.js` from the backend root.
+
+**Buildings (2)**
+- Résidence Al Andalus — 6 apartments, managed by syndic, caretaker = gardien, Casablanca
+- Résidence Les Orangers — 4 apartments, managed by syndic, Rabat
+
+**Apartments (10)**
+- Building 1: 1A (occupied → resident), 1B (occupied), 2A, 2B (vacant), 3A (maintenance), 3B (vacant)
+- Building 2: 1A, 1B, 2A, 2B (all vacant)
+
+**Announcements (5, all published)**
+- Travaux ascenseur (maintenance, high)
+- Réunion de copropriété (event, medium)
+- Rappel cotisations (general, medium)
+- Alerte sécurité (emergency, urgent)
+- Jardinage collectif (event, low)
+
+**Tasks (5)**
+- `pending` — Nettoyage hall entrée
+- `assigned` → gardien — Sortie poubelles
+- `in_progress` → gardien — Remplacement ampoule
+- `submitted_for_approval` → gardien — Vérification interphone
+- `approved` → gardien — Nettoyage parking (approved by syndic)
+
+**Charges (5)**
+- Apt 1A: Cotisation Avril 2026 (pending, 800 MAD)
+- Apt 1A: Cotisation Mars 2026 (paid, 800 MAD)
+- Apt 1A: Eau Mars 2026 (paid, 120 MAD)
+- Apt 1B: Cotisation Fév 2026 (overdue, 800 MAD)
+- Apt 1B: Sécurité Avril 2026 (pending, 200 MAD)
+
+**Payments (3)**
+- RCP-2026-001: 800 MAD bank transfer, completed (Mars maintenance)
+- RCP-2026-002: 120 MAD cash, completed (Mars utilities)
+- Pending: 800 MAD bank transfer (Avril maintenance)
+
+**Complaints (3)**
+- Bruit excessif (noise, high, in_progress — syndic responded)
+- Fuite d'eau (maintenance, urgent, open)
+- Éclairage défaillant (safety, high, resolved, rated 4/5)
 
 ---
 

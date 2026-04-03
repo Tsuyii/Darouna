@@ -34,3 +34,4 @@ _extracted/
 # Git worktrees
 .worktrees/
 .vercel
+.gstack/
