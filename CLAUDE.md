@@ -569,10 +569,11 @@ All features are fully implemented on the backend. Frontend only needs to call t
 | Resident Properties | ✅ | ✅ Done |
 | Resident Ledger (payment history) | ✅ | ✅ Done |
 | Resident Support (complaints) | ✅ | ✅ Done |
-| Announcements | ✅ | ⏳ Phase 3 next |
-| Votes | ✅ | ⏳ Phase 3 |
-| Notifications | ✅ | ⏳ Phase 3 |
-| Budgets & reports | ✅ | ⏳ Phase 3 |
+| Announcements (Syndic create/delete + Resident read/like) | ✅ | ✅ Done |
+| Votes (Syndic create/close + Resident cast) | ✅ | ✅ Done |
+| Notifications panel (bell icon, all roles) | ✅ | ✅ Done |
+| Gardien Finance | ✅ | ⏳ Next session |
+| Budgets & reports | ✅ | ⏳ Next session |
 
 ---
 
