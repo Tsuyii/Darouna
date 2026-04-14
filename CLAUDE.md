@@ -48,7 +48,8 @@ src/
 │   └── gardien/
 │       ├── Dashboard.tsx          # Today's summary
 │       ├── Tasks.tsx              # Task list + status updates
-│       └── Finance.tsx            # Placeholder
+│       ├── Finance.tsx            # Placeholder
+│       └── Menu.tsx               # "More" tab — Phase 2 placeholder (profile/settings)
 ├── lib/
 │   ├── api.ts                     # Axios instance, base URL from VITE_API_URL
 │   ├── auth.ts                    # Auth API calls (login/register/refresh/logout/me)
