@@ -9,16 +9,20 @@ import SyndicTasks from '../pages/syndic/Tasks'
 import SyndicFinance from '../pages/syndic/Finance'
 import SyndicAnnouncements from '../pages/syndic/Announcements'
 import SyndicVotes from '../pages/syndic/Votes'
+import SyndicContacts from '../pages/syndic/Contacts'
 import ResidentDashboard from '../pages/resident/Dashboard'
 import ResidentProperties from '../pages/resident/Properties'
 import ResidentLedger from '../pages/resident/Ledger'
 import ResidentSupport from '../pages/resident/Support'
 import ResidentAnnouncements from '../pages/resident/Announcements'
 import ResidentVotes from '../pages/resident/Votes'
+import ResidentMessages from '../pages/resident/Messages'
 import GardienDashboard from '../pages/gardien/Dashboard'
 import GardienTasks from '../pages/gardien/Tasks'
 import GardienFinance from '../pages/gardien/Finance'
 import GardienMenu from '../pages/gardien/Menu'
+import GardienMessages from '../pages/gardien/Messages'
+import ChatThread from '../pages/shared/ChatThread'
 import DashboardLayout from '../components/layout/DashboardLayout'
 
 function RoleGuard({
@@ -54,6 +58,8 @@ export default function AppRouter() {
         <Route path="finance" element={<SyndicFinance />} />
         <Route path="announcements" element={<SyndicAnnouncements />} />
         <Route path="votes" element={<SyndicVotes />} />
+        <Route path="contacts" element={<SyndicContacts />} />
+        <Route path="chat/:partnerId" element={<ChatThread />} />
       </Route>
 
       {/* Resident */}
@@ -64,6 +70,8 @@ export default function AppRouter() {
         <Route path="support" element={<ResidentSupport />} />
         <Route path="announcements" element={<ResidentAnnouncements />} />
         <Route path="votes" element={<ResidentVotes />} />
+        <Route path="messages" element={<ResidentMessages />} />
+        <Route path="chat/:partnerId" element={<ChatThread />} />
       </Route>
 
       {/* Gardien */}
@@ -72,6 +80,8 @@ export default function AppRouter() {
         <Route path="tasks" element={<GardienTasks />} />
         <Route path="finance" element={<GardienFinance />} />
         <Route path="menu" element={<GardienMenu />} />
+        <Route path="messages" element={<GardienMessages />} />
+        <Route path="chat/:partnerId" element={<ChatThread />} />
       </Route>
 
       {/* Catch-all */}

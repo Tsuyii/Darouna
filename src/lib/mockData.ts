@@ -389,3 +389,40 @@ export const mockNotifications = [
     createdAt: '2026-04-01T08:00:00Z',
   },
 ]
+
+// Phase 4 — Messaging / Chat
+
+export const mockResidents = [
+  { id: 'u-resident-1', name: 'Ahmed Resident',  role: 'resident', apartment: '1A', building: 'Résidence Al Andalus', phone: '+212 6 12 34 56 78' },
+  { id: 'u-resident-2', name: 'Sara Benali',      role: 'resident', apartment: '1B', building: 'Résidence Al Andalus', phone: null },
+]
+
+export const mockGardiens = [
+  { id: 'u-gardien-1', name: 'Karim Gardien', role: 'gardien', building: 'Résidence Al Andalus', phone: '+212 6 98 76 54 32' },
+]
+
+// Conversations visible to each role
+export const mockConversations = [
+  {
+    partner: { id: 'u-syndic-1', name: 'Syndic Admin', role: 'syndic' as const },
+    lastMessage: { content: 'Votre demande a bien été prise en compte.', createdAt: '2026-04-21T10:30:00Z', fromMe: false },
+    unread: 1,
+  },
+  {
+    partner: { id: 'u-gardien-1', name: 'Karim Gardien', role: 'gardien' as const },
+    lastMessage: { content: 'Je vais m\'en occuper dès demain matin.', createdAt: '2026-04-20T15:00:00Z', fromMe: false },
+    unread: 0,
+  },
+]
+
+// Thread with Syndic (viewed by Resident or Gardien)
+export const mockThread = {
+  partner: { id: 'u-syndic-1', name: 'Syndic Admin', role: 'syndic' },
+  messages: [
+    { id: 'm1', content: 'Bonjour, j\'ai un problème avec la fuite d\'eau.',         fromMe: true,  senderName: 'Ahmed Resident', createdAt: '2026-04-21T09:00:00Z', read: true },
+    { id: 'm2', content: 'Bonjour Ahmed, nous avons bien reçu votre signalement.',    fromMe: false, senderName: 'Syndic Admin',   createdAt: '2026-04-21T09:15:00Z', read: true },
+    { id: 'm3', content: 'Le plombier passera demain entre 9h et 12h.',               fromMe: false, senderName: 'Syndic Admin',   createdAt: '2026-04-21T09:16:00Z', read: true },
+    { id: 'm4', content: 'Parfait, merci ! Je serai disponible.',                     fromMe: true,  senderName: 'Ahmed Resident', createdAt: '2026-04-21T09:30:00Z', read: true },
+    { id: 'm5', content: 'Votre demande a bien été prise en compte.',                 fromMe: false, senderName: 'Syndic Admin',   createdAt: '2026-04-21T10:30:00Z', read: false },
+  ],
+}
