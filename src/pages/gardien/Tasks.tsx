@@ -31,8 +31,12 @@ export default function GardienTasks() {
       setLoading(false)
       return
     }
-    api.get('/api/v1/tasks/gardien')
-      .then((res) => setTasks(res.data.data ?? []))
+    api.get('/api/v1/tasks/gardien/my-tasks')
+      .then((res) => {
+        const raw = res.data.data ?? []
+        // Normalize MongoDB _id → id
+        setTasks(raw.map((t: Record<string, unknown>) => ({ ...t, id: t._id ?? t.id })))
+      })
       .catch(() => {})
       .finally(() => setLoading(false))
   }, [])

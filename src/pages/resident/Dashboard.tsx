@@ -19,9 +19,12 @@ interface Announcement {
 }
 
 const ANNOUNCE_TYPE_META: Record<string, { label: string; bg: string; text: string }> = {
-  urgent: { label: 'Urgent', bg: 'bg-error-container/10',            text: 'text-error' },
-  event:  { label: 'Event',  bg: 'bg-tertiary-container/10',         text: 'text-tertiary' },
-  info:   { label: 'Info',   bg: 'bg-secondary-container/20',        text: 'text-secondary' },
+  urgent:      { label: 'Urgent',      bg: 'bg-error-container/10',        text: 'text-error' },
+  emergency:   { label: 'Urgent',      bg: 'bg-error-container/10',        text: 'text-error' },
+  event:       { label: 'Event',       bg: 'bg-tertiary-container/10',     text: 'text-tertiary' },
+  maintenance: { label: 'Maintenance', bg: 'bg-secondary-container/20',    text: 'text-secondary' },
+  general:     { label: 'Info',        bg: 'bg-secondary-container/20',    text: 'text-secondary' },
+  info:        { label: 'Info',        bg: 'bg-secondary-container/20',    text: 'text-secondary' },
 }
 
 export default function ResidentDashboard() {
@@ -43,8 +46,11 @@ export default function ResidentDashboard() {
           api.get('/api/v1/charges'),
           api.get('/api/v1/announcements'),
         ])
-        setCharges(chargesRes.data.data ?? [])
-        setAnnouncements((announcementsRes.data.data ?? []).slice(0, 3))
+        // Normalize MongoDB _id → id
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const norm = (arr: any[]) => arr.map((x) => ({ ...x, id: x._id ?? x.id }))
+        setCharges(norm(chargesRes.data.data ?? []))
+        setAnnouncements(norm(announcementsRes.data.data ?? []).slice(0, 3))
       } catch {
         // graceful degradation
       } finally {

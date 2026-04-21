@@ -21,8 +21,17 @@ export default function GardienDashboard() {
       setLoading(false)
       return
     }
-    api.get('/api/v1/tasks/stats')
-      .then((res) => setStats(res.data.data))
+    // /api/v1/tasks/stats doesn't exist — compute from gardien task list
+    api.get('/api/v1/tasks/gardien/my-tasks')
+      .then((res) => {
+        const tasks: { status: string }[] = res.data.data ?? []
+        setStats({
+          total:      tasks.length,
+          pending:    tasks.filter((t) => t.status === 'pending' || t.status === 'assigned').length,
+          inProgress: tasks.filter((t) => t.status === 'in_progress').length,
+          completed:  tasks.filter((t) => t.status === 'completed' || t.status === 'approved' || t.status === 'submitted_for_approval').length,
+        })
+      })
       .catch(() => {})
       .finally(() => setLoading(false))
   }, [])
