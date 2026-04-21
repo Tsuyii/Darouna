@@ -668,8 +668,8 @@ Full in-app chat between Syndic, Residents, and Gardien. Requires new backend en
 | From \ To | Syndic | Resident | Gardien |
 |-----------|--------|----------|---------|
 | Syndic    | —      | ✅        | ✅       |
-| Resident  | ✅      | —        | ❌       |
-| Gardien   | ✅      | ❌        | —       |
+| Resident  | ✅      | —        | ✅       |
+| Gardien   | ✅      | ✅        | —       |
 
 ### Navigation additions (decide tab layout in session)
 - **Syndic**: add Contacts tab (swap Fix tab or add 5th — decide)
