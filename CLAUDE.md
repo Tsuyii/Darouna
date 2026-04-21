@@ -576,6 +576,7 @@ All features are fully implemented on the backend. Frontend only needs to call t
 | Gardien Finance | ✅ | ✅ Done |
 | Gardien Menu (real content) | — | ✅ Done |
 | Budgets & reports (Syndic Finance section) | ✅ | ✅ Done |
+| Messaging / Chat system | ⏳ Phase 4 | See spec below |
 
 ---
 
@@ -639,3 +640,56 @@ All errors observed were from Vercel's deployment-protection layer (401/403) and
 | 2 | 🔴 High | Gardien Tasks calls `GET /api/v1/tasks/gardien` — actual route is `/gardien/my-tasks` | Fixed endpoint path |
 | 3 | 🟡 Medium | MongoDB `_id` not mapped to `id` — React keys and action handlers break with live data | Added `_id → id` normalization in Gardien Tasks and Resident Dashboard live paths |
 | 4 | 🟡 Medium | Announcement types `emergency`, `maintenance`, `general` not in type map | Added all backend types; `emergency` now renders as Urgent/red badge |
+
+---
+
+## Phase 4 — Messaging / Chat System (planned, not started)
+
+### Overview
+Full in-app chat between Syndic, Residents, and Gardien. Requires new backend endpoints (not yet built).
+
+### Syndic — new "Contacts" tab
+- Bottom nav gets a **Contacts** tab (icon: `contacts` or `forum`)
+- Contacts screen shows all residents grouped by residence:
+  ```
+  Résidence Al Andalus
+    ├── Ahmed Resident — Apt 1A — [phone if set] — [Message]
+    └── Sara Benali    — Apt 1B — [phone if set] — [Message]
+  ```
+- Tapping **Message** opens a 1:1 conversation thread
+
+### Chat thread (all roles)
+- Full-screen conversation view
+- Bubble UI: sender right (gradient), receiver left (glass card)
+- Real-time or polling — decide in session (WebSocket vs. polling every 5s)
+- Message types: text only (phase 4a); photos later (phase 4b)
+
+### Roles & access
+| From \ To | Syndic | Resident | Gardien |
+|-----------|--------|----------|---------|
+| Syndic    | —      | ✅        | ✅       |
+| Resident  | ✅      | —        | ❌       |
+| Gardien   | ✅      | ❌        | —       |
+
+### Navigation additions (decide tab layout in session)
+- **Syndic**: add Contacts tab (swap Fix tab or add 5th — decide)
+- **Resident**: add Messages tab (swap one existing tab — decide)
+- **Gardien**: add Messages tab (swap one existing tab — decide)
+
+### Backend work needed
+- `POST /api/v1/messages`                          — send `{ toUserId, content }`
+- `GET  /api/v1/messages/conversations`             — list conversations + last message + unread count
+- `GET  /api/v1/messages/conversations/:userId`     — full thread with a user
+- `PUT  /api/v1/messages/:id/read`                  — mark read
+- `GET  /api/v1/users/residents`                    — Syndic: list residents with apt + building info
+
+### Frontend files to create
+- `src/pages/syndic/Contacts.tsx`      — contacts list grouped by residence
+- `src/pages/shared/ChatThread.tsx`    — conversation view (shared across roles)
+- `src/pages/resident/Messages.tsx`    — resident conversation list
+- `src/pages/gardien/Messages.tsx`     — gardien conversation list
+
+### Routes
+- `/syndic/contacts`, `/syndic/chat/:userId`
+- `/resident/messages`, `/resident/chat/:userId`
+- `/gardien/messages`, `/gardien/chat/:userId`
