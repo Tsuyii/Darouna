@@ -68,11 +68,17 @@ export default function ChatThread() {
     setSending(true)
     const content = text.trim()
     setText('')
+    // Optimistic update — show immediately
+    const tempId = `temp-${Date.now()}`
+    const tempMsg: Message = { id: tempId, content, fromMe: true, senderName: 'Me', createdAt: new Date().toISOString(), read: false }
+    setThread((prev) => prev ? { ...prev, messages: [...prev.messages, tempMsg] } : prev)
     try {
       await api.post('/api/v1/messages', { toUserId: partnerId, content })
-      await fetchThread()
+      await fetchThread() // replace optimistic msg with real one
     } catch {
-      setText(content) // restore on error
+      // Remove optimistic msg and restore text on failure
+      setThread((prev) => prev ? { ...prev, messages: prev.messages.filter((m) => m.id !== tempId) } : prev)
+      setText(content)
     } finally {
       setSending(false)
     }
