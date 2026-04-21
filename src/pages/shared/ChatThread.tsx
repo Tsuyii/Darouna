@@ -56,8 +56,10 @@ export default function ChatThread() {
 
   useEffect(() => {
     fetchThread()
-    // Poll every 5 seconds for new messages
-    pollRef.current = setInterval(fetchThread, 5000)
+    // Poll every 5 seconds for new messages (live only — mock data is local state)
+    if (!MOCK) {
+      pollRef.current = setInterval(fetchThread, 5000)
+    }
     return () => {
       if (pollRef.current) clearInterval(pollRef.current)
     }
