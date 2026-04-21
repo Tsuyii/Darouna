@@ -201,20 +201,20 @@ background: linear-gradient(to bottom right, #064E3B, #10B981);
 ### Syndic
 - **Dash** → `dashboard` icon
 - **Units** → `domain` icon
-- **Fix** → `build_circle` icon
 - **Cash** → `payments` icon
+- **Contacts** → `forum` icon  ← Phase 4 (was "Fix")
 
 ### Resident
 - **Home** → `dashboard` icon
 - **Properties** → `domain` icon
 - **Ledger** → `account_balance_wallet` icon
-- **Support** → `support_agent` icon
+- **Messages** → `chat` icon  ← Phase 4 (was "Support")
 
 ### Gardien
 - **Home** → `home` icon
 - **Tasks** → `assignment` icon
 - **Finance** → `account_balance_wallet` icon
-- **Menu** → `menu` icon
+- **Messages** → `chat` icon  ← Phase 4 (was "Menu")
 
 Bottom nav pattern (active state):
 ```jsx
@@ -576,7 +576,7 @@ All features are fully implemented on the backend. Frontend only needs to call t
 | Gardien Finance | ✅ | ✅ Done |
 | Gardien Menu (real content) | — | ✅ Done |
 | Budgets & reports (Syndic Finance section) | ✅ | ✅ Done |
-| Messaging / Chat system | ⏳ Phase 4 | See spec below |
+| Messaging / Chat system | ✅ | ✅ Done (Phase 4a — text only) |
 
 ---
 
@@ -640,6 +640,17 @@ All errors observed were from Vercel's deployment-protection layer (401/403) and
 | 2 | 🔴 High | Gardien Tasks calls `GET /api/v1/tasks/gardien` — actual route is `/gardien/my-tasks` | Fixed endpoint path |
 | 3 | 🟡 Medium | MongoDB `_id` not mapped to `id` — React keys and action handlers break with live data | Added `_id → id` normalization in Gardien Tasks and Resident Dashboard live paths |
 | 4 | 🟡 Medium | Announcement types `emergency`, `maintenance`, `general` not in type map | Added all backend types; `emergency` now renders as Urgent/red badge |
+
+### Built (2026-04-21) — Phase 4 Messaging
+
+| # | Feature | Details |
+|---|---------|---------|
+| 1 | Backend: Message model + API | `Message.js`, `messageController.js`, `messages.js` routes at `/api/v1/messages` |
+| 2 | Syndic Contacts page | `/syndic/contacts` — residents + gardiens grouped by role, search, Message CTA |
+| 3 | Resident Messages page | `/resident/messages` — conversation list with unread badges |
+| 4 | Gardien Messages page | `/gardien/messages` — conversation list with unread badges |
+| 5 | Shared ChatThread | `/*/chat/:partnerId` — bubble UI, 5s polling, read receipts |
+| 6 | BottomNav updated | Syndic: Contacts (forum) replaces Fix; Resident/Gardien: Messages (chat) replaces Support/Menu |
 
 ---
 
