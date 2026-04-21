@@ -290,14 +290,15 @@ POST   /api/v1/apartments/:id/assign-resident
 DELETE /api/v1/apartments/:id/unassign-resident
 
 # Tasks
-POST   /api/v1/tasks                     (Syndic creates)
-GET    /api/v1/tasks                     (Syndic: all tasks)
-GET    /api/v1/tasks/gardien             (Gardien: my tasks)
-GET    /api/v1/tasks/stats
-POST   /api/v1/tasks/:id/assign          { gardienId }
-PUT    /api/v1/tasks/:id/status          { status }
-POST   /api/v1/tasks/:id/submit          (Gardien submits for approval)
-POST   /api/v1/tasks/:id/approve         { approved: bool, reason? }
+POST   /api/v1/tasks                          (Syndic creates)
+GET    /api/v1/tasks                          (Syndic: all tasks)
+GET    /api/v1/tasks/gardien/my-tasks         (Gardien: my tasks — NOT /tasks/gardien)
+POST   /api/v1/tasks/:id/assign               { gardienId }
+PUT    /api/v1/tasks/:id/status               { status }
+POST   /api/v1/tasks/:id/submit               (Gardien submits for approval)
+POST   /api/v1/tasks/:id/approve              { approved: bool, reason? }
+POST   /api/v1/tasks/:id/reject               { reason }
+# NOTE: /api/v1/tasks/stats does NOT exist. Compute stats from the gardien task list.
 
 # Charges (Syndic issues, Resident reads)
 POST   /api/v1/charges
@@ -464,7 +465,7 @@ VITE_MOCK_DATA=true   # set to 'true' to use mock data (bypasses live API calls)
 - **Password:** `Darouna2026x`
 - **Cluster:** `cluster0.pks5dvg.mongodb.net`
 - **Connection string:** `mongodb+srv://darouna_user:Darouna2026x@cluster0.pks5dvg.mongodb.net/darouna?retryWrites=true&w=majority`
-- Connection verified working as of 2026-04-03.
+- Connection verified working as of 2026-04-21. All 14 collections present, seed data intact.
 
 > Used by the backend (`residence-app-backend`). Set as `MONGODB_URI` in the backend's environment (Render).
 
@@ -630,11 +631,11 @@ All errors observed were from Vercel's deployment-protection layer (401/403) and
 | 1 | 🔴 High | Gardien Menu tab navigates to `/` (no route for `/gardien/menu`) | Created `src/pages/gardien/Menu.tsx` + added route in `router/index.tsx` |
 | 2 | 🟡 Medium | CLAUDE.md incorrectly marked Syndic Units as ✅ Done | Corrected status to ⏳ Phase 2 next |
 
-### Prioritized Fix List (remaining)
+### Fixes Applied (2026-04-21)
 
-1. **Phase 2 — Build Syndic Units page** — most visible gap; data exists in backend
-2. **Phase 2 — Build Syndic Tasks (approve/reject)** — 1 task awaiting approval in seed data
-3. **Phase 2 — Build Resident Ledger** — resident has 3,600 MAD outstanding, no way to see history
-4. **Phase 2 — Build Resident Support** — complaints exist in DB, no UI to view them
-5. **Phase 2 — Build Syndic Finance** — charges and payments exist, no way to manage
-6. **Phase 2 — Build Resident Properties** — apartment details (1A, Résidence Al-Andalus) not accessible
+| # | Severity | Issue | Fix |
+|---|----------|-------|-----|
+| 1 | 🔴 High | Gardien dashboard calls `GET /api/v1/tasks/stats` — route does not exist | Replaced with `GET /api/v1/tasks/gardien/my-tasks`; compute stats client-side |
+| 2 | 🔴 High | Gardien Tasks calls `GET /api/v1/tasks/gardien` — actual route is `/gardien/my-tasks` | Fixed endpoint path |
+| 3 | 🟡 Medium | MongoDB `_id` not mapped to `id` — React keys and action handlers break with live data | Added `_id → id` normalization in Gardien Tasks and Resident Dashboard live paths |
+| 4 | 🟡 Medium | Announcement types `emergency`, `maintenance`, `general` not in type map | Added all backend types; `emergency` now renders as Urgent/red badge |
