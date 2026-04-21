@@ -7,20 +7,23 @@ const NAV_ITEMS: Record<Role, { to: string; icon: string; label: string }[]> = {
   syndic: [
     { to: '/syndic',            icon: 'dashboard',             label: 'Dash' },
     { to: '/syndic/units',      icon: 'domain',                label: 'Units' },
+    { to: '/syndic/tasks',      icon: 'build_circle',          label: 'Fix' },
     { to: '/syndic/finance',    icon: 'payments',              label: 'Cash' },
-    { to: '/syndic/contacts',   icon: 'forum',                 label: 'Contacts' },
+    { to: '/syndic/contacts',   icon: 'forum',                 label: 'Chat' },
   ],
   resident: [
     { to: '/resident',             icon: 'dashboard',              label: 'Home' },
-    { to: '/resident/properties',  icon: 'domain',                 label: 'Properties' },
+    { to: '/resident/properties',  icon: 'domain',                 label: 'Property' },
     { to: '/resident/ledger',      icon: 'account_balance_wallet', label: 'Ledger' },
-    { to: '/resident/messages',    icon: 'chat',                   label: 'Messages' },
+    { to: '/resident/support',     icon: 'support_agent',          label: 'Support' },
+    { to: '/resident/messages',    icon: 'chat',                   label: 'Chat' },
   ],
   gardien: [
     { to: '/gardien',             icon: 'home',                   label: 'Home' },
     { to: '/gardien/tasks',       icon: 'assignment',             label: 'Tasks' },
     { to: '/gardien/finance',     icon: 'account_balance_wallet', label: 'Finance' },
-    { to: '/gardien/messages',    icon: 'chat',                   label: 'Messages' },
+    { to: '/gardien/menu',        icon: 'menu',                   label: 'Menu' },
+    { to: '/gardien/messages',    icon: 'chat',                   label: 'Chat' },
   ],
 }
 
