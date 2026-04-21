@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../../lib/api'
-import { MOCK, mockResidents, mockGardiens } from '../../lib/mockData'
 
 interface Contact {
   id: string
@@ -20,28 +19,6 @@ export default function SyndicContacts() {
   const [search, setSearch] = useState('')
 
   useEffect(() => {
-    if (MOCK) {
-      const residents: Contact[] = mockResidents.map((r) => ({
-        id: r.id,
-        name: r.name,
-        role: 'resident',
-        apartment: r.apartment,
-        building: r.building,
-        phone: r.phone,
-        unread: 0,
-      }))
-      const gardiens: Contact[] = mockGardiens.map((g) => ({
-        id: g.id,
-        name: g.name,
-        role: 'gardien',
-        building: g.building,
-        phone: g.phone,
-        unread: 0,
-      }))
-      setContacts([...residents, ...gardiens])
-      setLoading(false)
-      return
-    }
     Promise.all([
       api.get('/api/v1/users/residents/list?limit=100'),
       api.get('/api/v1/users?role=gardien&limit=100'),
@@ -50,7 +27,7 @@ export default function SyndicContacts() {
         const residents: Contact[] = (rRes.data.data?.users ?? []).map((u: any) => ({
           id: u._id ?? u.id,
           name: u.name,
-          role: 'resident',
+          role: 'resident' as const,
           apartment: u.apartment?.number ?? u.apartment,
           building: u.building?.name ?? u.building,
           phone: u.phone ?? null,
@@ -59,7 +36,7 @@ export default function SyndicContacts() {
         const gardiens: Contact[] = (gRes.data.data?.users ?? []).map((u: any) => ({
           id: u._id ?? u.id,
           name: u.name,
-          role: 'gardien',
+          role: 'gardien' as const,
           building: u.building?.name ?? u.building,
           phone: u.phone ?? null,
           unread: 0,

@@ -2,7 +2,6 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import api from '../../lib/api'
 import { useAuthStore } from '../../store/authStore'
-import { MOCK, mockThread } from '../../lib/mockData'
 
 interface Message {
   id: string
@@ -39,11 +38,6 @@ export default function ChatThread() {
 
   const fetchThread = useCallback(async () => {
     if (!partnerId) return
-    if (MOCK) {
-      setThread(mockThread as Thread)
-      setLoading(false)
-      return
-    }
     try {
       const res = await api.get(`/api/v1/messages/conversations/${partnerId}`)
       setThread(res.data.data)
@@ -56,10 +50,8 @@ export default function ChatThread() {
 
   useEffect(() => {
     fetchThread()
-    // Poll every 5 seconds for new messages (live only — mock data is local state)
-    if (!MOCK) {
-      pollRef.current = setInterval(fetchThread, 5000)
-    }
+    // Poll every 5 seconds for new messages
+    pollRef.current = setInterval(fetchThread, 5000)
     return () => {
       if (pollRef.current) clearInterval(pollRef.current)
     }
@@ -77,22 +69,8 @@ export default function ChatThread() {
     const content = text.trim()
     setText('')
     try {
-      if (MOCK) {
-        const newMsg: Message = {
-          id: `m${Date.now()}`,
-          content,
-          fromMe: true,
-          senderName: 'Me',
-          createdAt: new Date().toISOString(),
-          read: false,
-        }
-        setThread((prev) =>
-          prev ? { ...prev, messages: [...prev.messages, newMsg] } : prev
-        )
-      } else {
-        await api.post('/api/v1/messages', { toUserId: partnerId, content })
-        await fetchThread()
-      }
+      await api.post('/api/v1/messages', { toUserId: partnerId, content })
+      await fetchThread()
     } catch {
       setText(content) // restore on error
     } finally {

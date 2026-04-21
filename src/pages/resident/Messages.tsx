@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../../lib/api'
-import { MOCK, mockConversations } from '../../lib/mockData'
 
 interface Conversation {
   partner: { id: string; name: string; role: string }
@@ -29,11 +28,6 @@ export default function ResidentMessages() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (MOCK) {
-      setConversations(mockConversations as Conversation[])
-      setLoading(false)
-      return
-    }
     api.get('/api/v1/messages/conversations')
       .then((res) => setConversations(res.data.data ?? []))
       .catch(() => {})
