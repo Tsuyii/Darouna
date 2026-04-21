@@ -198,23 +198,26 @@ background: linear-gradient(to bottom right, #064E3B, #10B981);
 
 ## Role Navigation
 
-### Syndic
+### Syndic (5 tabs)
 - **Dash** → `dashboard` icon
 - **Units** → `domain` icon
+- **Fix** → `build_circle` icon
 - **Cash** → `payments` icon
-- **Contacts** → `forum` icon  ← Phase 4 (was "Fix")
+- **Chat** → `forum` icon  ← Phase 4
 
-### Resident
+### Resident (5 tabs)
 - **Home** → `dashboard` icon
-- **Properties** → `domain` icon
+- **Property** → `domain` icon
 - **Ledger** → `account_balance_wallet` icon
-- **Messages** → `chat` icon  ← Phase 4 (was "Support")
+- **Support** → `support_agent` icon
+- **Chat** → `chat` icon  ← Phase 4
 
-### Gardien
+### Gardien (5 tabs)
 - **Home** → `home` icon
 - **Tasks** → `assignment` icon
 - **Finance** → `account_balance_wallet` icon
-- **Messages** → `chat` icon  ← Phase 4 (was "Menu")
+- **Menu** → `menu` icon
+- **Chat** → `chat` icon  ← Phase 4
 
 Bottom nav pattern (active state):
 ```jsx
@@ -576,7 +579,7 @@ All features are fully implemented on the backend. Frontend only needs to call t
 | Gardien Finance | ✅ | ✅ Done |
 | Gardien Menu (real content) | — | ✅ Done |
 | Budgets & reports (Syndic Finance section) | ✅ | ✅ Done |
-| Messaging / Chat system | ✅ | ✅ Done (Phase 4a — text only) |
+| Messaging / Chat system | ✅ | ✅ Done (Phase 4a — text only, real backend) |
 
 ---
 
@@ -650,7 +653,10 @@ All errors observed were from Vercel's deployment-protection layer (401/403) and
 | 3 | Resident Messages page | `/resident/messages` — conversation list with unread badges |
 | 4 | Gardien Messages page | `/gardien/messages` — conversation list with unread badges |
 | 5 | Shared ChatThread | `/*/chat/:partnerId` — bubble UI, 5s polling, read receipts |
-| 6 | BottomNav updated | Syndic: Contacts (forum) replaces Fix; Resident/Gardien: Messages (chat) replaces Support/Menu |
+| 6 | BottomNav updated | All roles keep original 4 tabs + Chat as 5th tab |
+| 7 | Resident/Gardien can initiate chats | Messages page fetches `/api/v1/users/contacts` — shows syndic/gardien/residents to start new threads |
+| 8 | Optimistic send | Message appears instantly; reverts only if server rejects |
+| 9 | Backend: GET /api/v1/users/contacts | Returns syndic + gardiens (or residents) for caller's building — any role |
 
 ---
 
