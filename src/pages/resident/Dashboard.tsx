@@ -92,7 +92,7 @@ export default function ResidentDashboard() {
                 </p>
               )}
             </div>
-            <button className="glass-glow bg-white text-[#064E3B] font-body font-bold py-4 px-8 rounded-lg shadow-lg hover:scale-[0.98] active:scale-[0.96] transition-transform flex items-center justify-center gap-2 self-start">
+            <button onClick={() => navigate('/resident/ledger')} className="glass-glow bg-white text-[#064E3B] font-body font-bold py-4 px-8 rounded-lg shadow-lg hover:scale-[0.98] active:scale-[0.96] transition-transform flex items-center justify-center gap-2 self-start">
               <span>Pay Now</span>
               <span className="material-symbols-outlined text-sm">arrow_forward</span>
             </button>
