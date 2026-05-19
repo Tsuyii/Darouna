@@ -1,5 +1,29 @@
 # CHANGELOG
 
+## 2026-05-19 — Payment Flow Fixes
+
+### Fixed
+- **`src/pages/resident/Ledger.tsx`**: Payment sheet was rendering behind the bottom nav (both `z-50`, nav wins due to DOM order) — bumped sheet to `z-[200]` so it appears above nav correctly
+- **`src/pages/resident/Ledger.tsx`**: Charges API response shape mismatch — endpoint returns `data.data.charges[]` not a flat array; field names are `description` (not `title`), `category` (not `type`), `_id` (not `id`), `paymentMethod` (not `method`) — added explicit mapping in the `load()` function
+- **`src/pages/resident/Dashboard.tsx`**: Pay Now hero button had no `onClick` — wired to `navigate('/resident/ledger')`
+- **`darouna-frontend/.env.local`**: `VITE_API_URL` was pointing to port `5000` but backend runs on `5001` — corrected for local dev
+
+---
+
+## 2026-04-22 — Mock Payment Interface
+
+### Updated
+- **`src/pages/resident/Ledger.tsx`**: Added a full mock payment flow as a bottom sheet modal. No real payment gateway is connected.
+  - **"Pay Now"** hero button opens a charge-selection step; per-row **"Pay"** button on each unpaid charge skips straight to method selection
+  - **5-step flow**: Select charge → Choose method → Enter details → Processing animation → Success/receipt screen
+  - **Payment methods**: Credit/Debit Card (formatted card number, name, expiry, CVV), Bank Transfer (shows syndic RIB, asks for payer's reference), Cash at reception (instructions only)
+  - **Processing step**: 2.2 s pulsing ring + progress bar animation
+  - **Success screen**: Gradient receipt card with generated `MOCK-2026-XXXX` reference, amount, method, date, and status
+  - **Optimistic state update**: on completion the charge flips to `paid` and a new entry appears in the Payments tab — no page reload needed
+  - In non-mock mode silently calls `POST /api/v1/payments` then always shows success (graceful degradation)
+
+---
+
 ## 2026-04-14 — Gardien Finance, Gardien Menu, Budget Report
 
 ### Added / Replaced
