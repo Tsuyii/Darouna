@@ -48,7 +48,17 @@ export default function SyndicFinance() {
     async function load() {
       try {
         const cRes = await api.get('/api/v1/charges')
-        const allCharges: Charge[] = cRes.data.data ?? []
+        // Endpoint returns { charges, total, pages }; normalise to a flat array
+        // and map backend field names (_id, description, populated apartment).
+        const raw = cRes.data.data?.charges ?? cRes.data.data ?? []
+        const allCharges: Charge[] = (Array.isArray(raw) ? raw : []).map((c: any) => ({
+          id: c._id ?? c.id,
+          apartment: c.apartment?.number ? `Apt ${c.apartment.number}` : typeof c.apartment === 'string' ? c.apartment : '—',
+          title: c.description ?? c.title ?? c.category ?? 'Charge',
+          amount: c.amount ?? 0,
+          status: c.status,
+          dueDate: c.dueDate,
+        }))
         setCharges(allCharges)
         // Derive stats from charges
         const revenue = allCharges.filter((c) => c.status === 'paid').reduce((s, c) => s + c.amount, 0)
@@ -88,7 +98,16 @@ export default function SyndicFinance() {
         amount: parseFloat(formAmount),
         category: formCategory,
       })
-      setCharges((prev) => [res.data.data, ...prev])
+      const c: any = res.data.data ?? {}
+      const created: Charge = {
+        id: c._id ?? c.id ?? `tmp-${Date.now()}`,
+        apartment: c.apartment?.number ? `Apt ${c.apartment.number}` : formApt,
+        title: c.description ?? c.title ?? formCategory,
+        amount: c.amount ?? parseFloat(formAmount),
+        status: c.status ?? 'pending',
+        dueDate: c.dueDate ?? new Date().toISOString(),
+      }
+      setCharges((prev) => [created, ...prev])
       setShowModal(false)
       setFormApt('')
       setFormAmount('')
@@ -259,7 +278,7 @@ export default function SyndicFinance() {
       {/* FAB */}
       <button
         onClick={() => setShowModal(true)}
-        className="fixed bottom-28 right-6 w-14 h-14 rounded-full text-white flex items-center justify-center shadow-[0_20px_40px_rgba(6,78,59,0.3)] z-50 active:scale-90 transition-transform"
+        className="fixed bottom-44 right-5 w-14 h-14 rounded-full text-white flex items-center justify-center shadow-[0_20px_40px_rgba(6,78,59,0.3)] z-50 active:scale-90 transition-transform"
         style={{ background: 'linear-gradient(135deg, #064E3B 0%, #10B981 100%)', boxShadow: 'inset 1px 1px 2px rgba(255,255,255,0.3)' }}
       >
         <span className="material-symbols-outlined text-2xl">add</span>
