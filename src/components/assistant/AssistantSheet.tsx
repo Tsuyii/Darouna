@@ -6,6 +6,24 @@ import MascotMedia from './MascotMedia'
 
 type Role = 'syndic' | 'resident' | 'gardien'
 
+const EXAMPLE_SETS: Record<string, Record<Role, string[]>> = {
+  en: {
+    resident: ['What do I owe right now?', 'Show my payment history', 'Any new announcements?'],
+    gardien: ['What tasks do I have today?', "What's still in progress?", 'Any new announcements?'],
+    syndic: ["What's our collection rate?", 'Any overdue charges?', 'Show open complaints'],
+  },
+  fr: {
+    resident: ['Combien dois-je payer ?', 'Mon historique de paiements', 'Nouvelles annonces ?'],
+    gardien: ["Quelles tâches aujourd'hui ?", "Qu'est-ce qui est en cours ?", 'Nouvelles annonces ?'],
+    syndic: ['Quel est notre taux de recouvrement ?', 'Des charges en retard ?', 'Réclamations ouvertes'],
+  },
+  ar: {
+    resident: ['كم عليّ أن أدفع الآن؟', 'اعرض سجل مدفوعاتي', 'هل هناك إعلانات جديدة؟'],
+    gardien: ['ما مهامي اليوم؟', 'ما الذي قيد التنفيذ؟', 'هل هناك إعلانات جديدة؟'],
+    syndic: ['ما نسبة التحصيل لدينا؟', 'هل توجد رسوم متأخرة؟', 'اعرض الشكاوى المفتوحة'],
+  },
+}
+
 interface AssistantSheetProps {
   open: boolean
   onClose: () => void
@@ -34,7 +52,7 @@ function FormattedText({ text }: { text: string }) {
 }
 
 export default function AssistantSheet({ open, onClose, role, userName }: AssistantSheetProps) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const [messages, setMessages] = useState<AssistantMessage[]>([])
   const [input, setInput] = useState('')
@@ -43,7 +61,10 @@ export default function AssistantSheet({ open, onClose, role, userName }: Assist
   const scrollRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
 
-  const examples = t(`assistant.examples.${role}`, { returnObjects: true }) as string[]
+  // Example chips kept as a local constant (crash-proof; not dependent on
+  // i18next returnObjects, which is unreliable here).
+  const lang = (i18n?.language || 'en').slice(0, 2)
+  const examples: string[] = (EXAMPLE_SETS[lang] || EXAMPLE_SETS.en)[role]
 
   // Load persisted history the first time the sheet opens.
   useEffect(() => {
@@ -117,7 +138,13 @@ export default function AssistantSheet({ open, onClose, role, userName }: Assist
   const isEmpty = messages.length === 0 && !loading
 
   return (
-    <div className="fixed inset-0 z-[60]" role="dialog" aria-modal="true" aria-label={t('assistant.title')}>
+    <div
+      className="fixed inset-0 z-[60]"
+      role="dialog"
+      aria-modal="true"
+      aria-label={t('assistant.title')}
+      dir={lang === 'ar' ? 'rtl' : 'ltr'}
+    >
       {/* Scrim */}
       <button
         className="assistant-scrim absolute inset-0 bg-on-surface/40 backdrop-blur-[2px]"

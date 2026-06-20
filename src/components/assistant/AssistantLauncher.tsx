@@ -25,7 +25,7 @@ export default function AssistantLauncher({ role }: { role: Role }) {
             src="/assistant/mascot-96.png"
             alt=""
             aria-hidden
-            className="assistant-bob h-12 w-12 object-contain"
+            className="assistant-bob h-14 w-14 object-contain drop-shadow-sm"
           />
         </button>
       )}
