@@ -1,0 +1,197 @@
+@startuml Darouna_UseCaseDiagram
+left to right direction
+skinparam backgroundColor #FAFAFA
+skinparam defaultFontName Helvetica
+skinparam actorStyle awesome
+skinparam usecase {
+  BackgroundColor #E8F5E9
+  BorderColor #2B6954
+  FontColor #1A1C1A
+}
+skinparam actor {
+  BackgroundColor #B0F0D6
+  BorderColor #2B6954
+  FontColor #1A1C1A
+}
+skinparam rectangle {
+  BackgroundColor #F4F3F1
+  BorderColor #6C7A71
+  FontColor #1A1C1A
+  FontStyle bold
+}
+skinparam ArrowColor #2B6954
+
+title <size:18><b>Diagramme de Cas d'Utilisation — Darouna S.G.I.R.</b></size>\n<size:12>Système de Gestion Immobilière Résidentielle</size>
+
+' ─────────────────────────────────────────────
+'  ACTEURS
+' ─────────────────────────────────────────────
+actor "Syndic"   as S #B0F0D6
+actor "Résident" as R #D5E3FC
+actor "Gardien"  as G #71F8E4
+
+' ─────────────────────────────────────────────
+'  AUTHENTIFICATION
+' ─────────────────────────────────────────────
+rectangle "Authentification" {
+  (S'inscrire)                    as UC_Register
+  (Se connecter)                  as UC_Login
+  (Se déconnecter)                as UC_Logout
+  (Changer le mot de passe)       as UC_ChangePwd
+  (Rafraîchir le token JWT)       as UC_Refresh
+
+  UC_Login ..> UC_Refresh : <<include>>
+}
+
+' ─────────────────────────────────────────────
+'  GESTION DU PATRIMOINE (Syndic)
+' ─────────────────────────────────────────────
+rectangle "Gestion du Patrimoine" {
+  (Créer / Modifier un bâtiment)  as UC_Buildings
+  (Gérer les appartements)        as UC_Apartments
+  (Assigner un résident)          as UC_AssignResident
+  (Désassigner un résident)       as UC_UnassignResident
+  (Assigner un gardien)           as UC_AssignGardien
+  (Consulter les statistiques)    as UC_BuildingStats
+
+  UC_AssignResident ..> UC_Apartments : <<include>>
+  UC_UnassignResident ..> UC_Apartments : <<include>>
+}
+
+' ─────────────────────────────────────────────
+'  GESTION DES TÂCHES
+' ─────────────────────────────────────────────
+rectangle "Gestion des Tâches" {
+  (Créer une tâche)               as UC_CreateTask
+  (Assigner une tâche au gardien) as UC_AssignTask
+  (Démarrer une tâche)            as UC_StartTask
+  (Mettre en pause)               as UC_PauseTask
+  (Soumettre une tâche + photos)  as UC_SubmitTask
+  (Approuver une tâche)           as UC_ApproveTask
+  (Rejeter une tâche)             as UC_RejectTask
+  (Signaler indisponibilité)      as UC_Unavail
+  (Consulter ses tâches)          as UC_ViewTasks
+
+  UC_SubmitTask ..> UC_ApproveTask : <<extend>>
+  UC_SubmitTask ..> UC_RejectTask  : <<extend>>
+  UC_AssignTask ..> UC_CreateTask  : <<include>>
+}
+
+' ─────────────────────────────────────────────
+'  FINANCES
+' ─────────────────────────────────────────────
+rectangle "Finances" {
+  (Créer une charge)              as UC_CreateCharge
+  (Voir les charges)              as UC_ViewCharges
+  (Effectuer un paiement)         as UC_Pay
+  (Confirmer un paiement manuel)  as UC_ConfirmPay
+  (Voir l'historique paiements)   as UC_PayHistory
+  (Consulter les rapports)        as UC_FinReport
+  (Gérer le budget)               as UC_Budget
+
+  UC_Pay ..> UC_ViewCharges : <<include>>
+  UC_ConfirmPay ..> UC_ViewCharges : <<include>>
+}
+
+' ─────────────────────────────────────────────
+'  COMMUNICATION
+' ─────────────────────────────────────────────
+rectangle "Communication" {
+  (Publier une annonce)           as UC_Announce
+  (Consulter les annonces)        as UC_ReadAnnounce
+  (Liker / Commenter)             as UC_LikeComment
+  (Créer un vote)                 as UC_CreateVote
+  (Voter)                         as UC_CastVote
+  (Clôturer un vote)              as UC_CloseVote
+  (Recevoir une notification)     as UC_Notif
+
+  UC_ReadAnnounce ..> UC_LikeComment : <<extend>>
+  UC_CloseVote ..> UC_CreateVote     : <<include>>
+}
+
+' ─────────────────────────────────────────────
+'  PLAINTES
+' ─────────────────────────────────────────────
+rectangle "Gestion des Plaintes" {
+  (Déposer une plainte)           as UC_FileComplaint
+  (Consulter les plaintes)        as UC_ViewComplaints
+  (Répondre à une plainte)        as UC_RespondComplaint
+  (Clôturer une plainte)          as UC_CloseComplaint
+  (Évaluer la résolution)         as UC_RateComplaint
+
+  UC_RespondComplaint ..> UC_ViewComplaints : <<include>>
+  UC_RateComplaint    ..> UC_CloseComplaint : <<extend>>
+}
+
+' ─────────────────────────────────────────────
+'  TABLEAUX DE BORD
+' ─────────────────────────────────────────────
+rectangle "Tableaux de Bord" {
+  (Tableau de bord Syndic)        as UC_DashSyndic
+  (Tableau de bord Résident)      as UC_DashResident
+  (Tableau de bord Gardien)       as UC_DashGardien
+}
+
+' ─────────────────────────────────────────────
+'  ASSOCIATIONS SYNDIC
+' ─────────────────────────────────────────────
+S --> UC_Register
+S --> UC_Login
+S --> UC_Logout
+S --> UC_ChangePwd
+S --> UC_Buildings
+S --> UC_Apartments
+S --> UC_AssignResident
+S --> UC_UnassignResident
+S --> UC_AssignGardien
+S --> UC_BuildingStats
+S --> UC_CreateTask
+S --> UC_AssignTask
+S --> UC_ApproveTask
+S --> UC_RejectTask
+S --> UC_CreateCharge
+S --> UC_ConfirmPay
+S --> UC_ViewCharges
+S --> UC_FinReport
+S --> UC_Budget
+S --> UC_Announce
+S --> UC_CreateVote
+S --> UC_CloseVote
+S --> UC_ViewComplaints
+S --> UC_RespondComplaint
+S --> UC_CloseComplaint
+S --> UC_DashSyndic
+S --> UC_Notif
+
+' ─────────────────────────────────────────────
+'  ASSOCIATIONS RÉSIDENT
+' ─────────────────────────────────────────────
+R --> UC_Register
+R --> UC_Login
+R --> UC_Logout
+R --> UC_ChangePwd
+R --> UC_Pay
+R --> UC_PayHistory
+R --> UC_ReadAnnounce
+R --> UC_CastVote
+R --> UC_FileComplaint
+R --> UC_ViewComplaints
+R --> UC_RateComplaint
+R --> UC_DashResident
+R --> UC_Notif
+
+' ─────────────────────────────────────────────
+'  ASSOCIATIONS GARDIEN
+' ─────────────────────────────────────────────
+G --> UC_Login
+G --> UC_Logout
+G --> UC_ViewTasks
+G --> UC_StartTask
+G --> UC_PauseTask
+G --> UC_SubmitTask
+G --> UC_Unavail
+G --> UC_ReadAnnounce
+G --> UC_DashGardien
+G --> UC_Notif
+
+@enduml

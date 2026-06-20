@@ -1,0 +1,294 @@
+@startuml Darouna_ClassDiagram
+skinparam classAttributeIconSize 0
+skinparam backgroundColor #FAFAFA
+skinparam defaultFontName Helvetica
+skinparam class {
+  BackgroundColor #E8F5E9
+  BorderColor #2B6954
+  HeaderBackgroundColor #2B6954
+  HeaderFontColor #FFFFFF
+  ArrowColor #2B6954
+}
+skinparam note {
+  BackgroundColor #FFF9C4
+  BorderColor #F9A825
+}
+
+title <size:18><b>Diagramme de Classes — Darouna S.G.I.R.</b></size>\n<size:12>Système de Gestion Immobilière Résidentielle</size>
+
+' ─────────────────────────────────────────────
+'  ENUMERATIONS
+' ─────────────────────────────────────────────
+enum Role {
+  syndic
+  resident
+  gardien
+}
+
+enum ApartmentStatus {
+  occupied
+  vacant
+  maintenance
+}
+
+enum TaskStatus {
+  pending
+  assigned
+  in_progress
+  submitted_for_approval
+  approved
+  rejected
+  paused
+  cancelled
+}
+
+enum ChargeStatus {
+  pending
+  paid
+  overdue
+  cancelled
+}
+
+enum ComplaintStatus {
+  open
+  pending
+  in_progress
+  resolved
+  closed
+  rejected
+}
+
+enum VoteStatus {
+  draft
+  active
+  closed
+  archived
+}
+
+enum AnnouncementStatus {
+  draft
+  published
+  archived
+  expired
+}
+
+' ─────────────────────────────────────────────
+'  CLASSES
+' ─────────────────────────────────────────────
+class User {
+  - _id         : ObjectId
+  + email       : String  <<unique>>
+  - password    : String
+  + name        : String
+  + phone       : String
+  + role        : Role
+  + status      : String
+  + lastLogin   : Date
+  + createdAt   : Date
+  + updatedAt   : Date
+  ..
+  + comparePassword(pwd) : Boolean
+}
+
+class Building {
+  - _id              : ObjectId
+  + name             : String
+  + address          : String
+  + city             : String
+  + postalCode       : String
+  + country          : String
+  + totalApartments  : Number
+  + description      : String
+  + amenities        : String[]
+  + createdAt        : Date
+  + updatedAt        : Date
+}
+
+class Apartment {
+  - _id           : ObjectId
+  + number        : String
+  + floor         : Number
+  + size          : Number
+  + bedrooms      : Number
+  + bathrooms     : Number
+  + status        : ApartmentStatus
+  + monthlyCharge : Number
+  + notes         : String
+  + createdAt     : Date
+  + updatedAt     : Date
+}
+
+class Task {
+  - _id                 : ObjectId
+  + title               : String
+  + description         : String
+  + category            : String
+  + priority            : String
+  + status              : TaskStatus
+  + dueDate             : Date
+  + startedAt           : Date
+  + completedAt         : Date
+  + syndicComment       : String
+  + gardienNote         : String
+  + confidence          : Number
+  + rejectionCount      : Number
+  + lastRejectionReason : String
+  + createdAt           : Date
+  + updatedAt           : Date
+}
+
+class TaskPhoto {
+  - _id       : ObjectId
+  + fileUrl   : String
+  + fileName  : String
+  + uploadedAt: Date
+}
+
+class Charge {
+  - _id             : ObjectId
+  + description     : String
+  + category        : String
+  + amount          : Number
+  + dueDate         : Date
+  + status          : ChargeStatus
+  + paidDate        : Date
+  + paidAmount      : Number
+  + daysOverdue     : Number
+  + remindersSent   : Number
+  + notes           : String
+  + createdAt       : Date
+  + updatedAt       : Date
+}
+
+class Payment {
+  - _id                   : ObjectId
+  + amount                : Number
+  + paymentMethod         : String
+  + transactionId         : String  <<unique>>
+  + status                : String
+  + paidDate              : Date
+  + receiptNumber         : String  <<unique>>
+  + category              : String
+  + refundedAmount        : Number
+  + notes                 : String
+  + createdAt             : Date
+  + updatedAt             : Date
+}
+
+class Complaint {
+  - _id            : ObjectId
+  + title          : String
+  + description    : String
+  + category       : String
+  + priority       : String
+  + status         : ComplaintStatus
+  + location       : String
+  + syndicResponse : String
+  + resolution     : String
+  + resolutionDate : Date
+  + rating         : Number
+  + ratingComment  : String
+  + createdAt      : Date
+  + updatedAt      : Date
+}
+
+class Announcement {
+  - _id            : ObjectId
+  + title          : String
+  + content        : String
+  + type           : String
+  + priority       : String
+  + status         : AnnouncementStatus
+  + targetAudience : String
+  + publishedDate  : Date
+  + expiryDate     : Date
+  + createdAt      : Date
+  + updatedAt      : Date
+}
+
+class Vote {
+  - _id             : ObjectId
+  + title           : String
+  + description     : String
+  + type            : String
+  + startDate       : Date
+  + endDate         : Date
+  + status          : VoteStatus
+  + totalVotes      : Number
+  + requiredQuorum  : Number
+  + quorumMet       : Boolean
+  + targetAudience  : String
+  + createdAt       : Date
+  + updatedAt       : Date
+}
+
+class Notification {
+  - _id        : ObjectId
+  + type       : String
+  + title      : String
+  + body       : String
+  + entityType : String
+  + entityId   : ObjectId
+  + priority   : String
+  + status     : String
+  + readAt     : Date
+  + createdAt  : Date
+  + updatedAt  : Date
+}
+
+class Budget {
+  - _id         : ObjectId
+  + period      : String
+  + totalBudget : Number
+  + spent       : Number
+  + remaining   : Number
+  + createdAt   : Date
+  + updatedAt   : Date
+}
+
+' ─────────────────────────────────────────────
+'  RELATIONS
+' ─────────────────────────────────────────────
+
+' Building ↔ User
+Building "1" *--> "0..*" Apartment       : contient >
+User "1 (syndic)" <--  Building           : managedBy
+User "0..1 (gardien)" <-- Building        : caretaker
+
+' Apartment ↔ User
+Apartment "0..*" --> "0..1" User          : occupée par (Résident)
+
+' Task
+Building "1" *--> "0..*" Task            : porte sur >
+Apartment "1" o--> "0..*" Task           : localisation
+Task "0..*" --> "1" User                 : créée par (Syndic) >
+Task "0..*" --> "0..1" User              : assignée à (Gardien) >
+Task "0..*" --> "0..1" User              : approuvée par >
+Task "1" *--> "0..*" TaskPhoto           : photos
+
+' Finance
+Building "1" *--> "0..*" Charge          : facture >
+Apartment "1" o--> "0..*" Charge         : facturée >
+Charge "0..*" --> "1" User               : créée par (Syndic) >
+Payment "0..*" --> "1" Charge            : règle >
+Payment "0..*" --> "1" User              : effectuée par (Résident) >
+Payment "0..*" --> "1" Apartment         : pour >
+Building "1" *--> "0..*" Budget          : budget annuel
+
+' Complaints
+Building "1" *--> "0..*" Complaint       : reçoit >
+Apartment "1" o--> "0..*" Complaint      : source >
+Complaint "0..*" --> "1" User            : déposée par (Résident) >
+Complaint "0..*" --> "0..1" User         : traitée par >
+
+' Announcements & Votes
+Building "1" *--> "0..*" Announcement   : publie >
+Announcement "0..*" --> "1" User         : créée par (Syndic) >
+Building "1" *--> "0..*" Vote           : organise >
+Vote "0..*" --> "1" User                : créée par (Syndic) >
+
+' Notifications
+Notification "0..*" --> "1" User         : destinée à >
+Building "1" o--> "0..*" Notification   : scope >
+
+@enduml

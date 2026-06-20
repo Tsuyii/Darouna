@@ -35,3 +35,6 @@ _extracted/
 .worktrees/
 .vercel
 .gstack/
+
+# Claude Code local settings
+.claude/
