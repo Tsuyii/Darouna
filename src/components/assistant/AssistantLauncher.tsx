@@ -18,7 +18,7 @@ export default function AssistantLauncher({ role }: { role: Role }) {
   const user = useAuthStore((s) => s.user)
   const firstName = user?.name?.trim().split(/\s+/)[0] ?? ''
 
-  const bottomClass = PAGES_WITH_FAB.includes(location.pathname) ? 'bottom-44' : 'bottom-24'
+  const bottomClass = PAGES_WITH_FAB.includes(location.pathname) ? 'bottom-48' : 'bottom-28'
 
   return (
     <>
