@@ -278,7 +278,7 @@ export default function SyndicFinance() {
       {/* FAB */}
       <button
         onClick={() => setShowModal(true)}
-        className="fixed bottom-44 right-5 w-14 h-14 rounded-full text-white flex items-center justify-center shadow-[0_20px_40px_rgba(6,78,59,0.3)] z-50 active:scale-90 transition-transform"
+        className="fixed bottom-24 right-5 w-14 h-14 rounded-full text-white flex items-center justify-center shadow-[0_20px_40px_rgba(6,78,59,0.3)] z-50 active:scale-90 transition-transform"
         style={{ background: 'linear-gradient(135deg, #064E3B 0%, #10B981 100%)', boxShadow: 'inset 1px 1px 2px rgba(255,255,255,0.3)' }}
       >
         <span className="material-symbols-outlined text-2xl">add</span>
