@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 2026-06-20 — AI Assistant (Phase 5)
+
+### Added
+- **Floating mascot assistant** — emerald pixel mascot FAB in the bottom-right (`end-4`, RTL-aware), mounted in `DashboardLayout` so it rides every authenticated screen
+- **`src/components/assistant/AssistantSheet.tsx`** — slide-up glass chat sheet: persistent history, role-aware example chips, `**bold**` + line-break rendering, deep-link action buttons that route to the relevant screen (`/resident/ledger`, `/gardien/tasks`, `/syndic/finance`, …), typing indicator, clear-chat, Escape/scrim dismiss, safe-area aware
+- **`src/components/assistant/MascotMedia.tsx`** — animated mascot clips (bob/wave/smile) with static-PNG fallback under `prefers-reduced-motion` or load failure
+- **`src/lib/assistant.ts`** — assistant API client (`/api/v1/assistant/chat|history`), always hits the real backend regardless of the mock flag
+- **i18n** — `assistant.*` strings (title, placeholder, greeting, per-role examples, errors) in en/fr/ar
+- **`public/assistant/`** — mascot PNG (resized 256/96) + 3 motion clips
+- **CSS** — FAB glow/bob, sheet slide-up, scrim fade, typing dots; all disabled under `prefers-reduced-motion`
+
+### Backend (residence-app-backend)
+- New `POST /api/v1/assistant/chat` (+ history) — DeepSeek tool-calling over role-scoped data; resident/gardien tools self-scoped, building-wide tools syndic-only
+
 ## 2026-05-19 — Payment Flow Fixes
 
 ### Fixed

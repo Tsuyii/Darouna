@@ -35,5 +35,21 @@
     "loading": "Chargement...",
     "error": "Une erreur est survenue",
     "comingSoon": "Bientôt disponible"
+  },
+  "assistant": {
+    "title": "Assistant Darouna",
+    "subtitle": "Votre compte et l'utilisation de l'app",
+    "open": "Ouvrir l'assistant",
+    "close": "Fermer",
+    "clear": "Effacer la discussion",
+    "send": "Envoyer",
+    "placeholder": "Posez une question sur votre compte…",
+    "greeting": "Bonjour {{name}}, je peux vous aider avec votre compte et l'utilisation de Darouna. Posez votre question, ou choisissez ci-dessous.",
+    "error": "Désolé, l'assistant est injoignable. Veuillez réessayer.",
+    "examples": {
+      "resident": ["Combien dois-je payer ?", "Mon historique de paiements", "Nouvelles annonces ?"],
+      "gardien": ["Quelles tâches aujourd'hui ?", "Qu'est-ce qui est en cours ?", "Nouvelles annonces ?"],
+      "syndic": ["Quel est notre taux de recouvrement ?", "Des charges en retard ?", "Réclamations ouvertes"]
+    }
   }
 }

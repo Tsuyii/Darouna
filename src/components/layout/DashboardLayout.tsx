@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom'
 import TopAppBar from './TopAppBar'
 import BottomNav from './BottomNav'
+import AssistantLauncher from '../assistant/AssistantLauncher'
 
 type Role = 'syndic' | 'resident' | 'gardien'
 
@@ -15,6 +16,7 @@ export default function DashboardLayout({ role }: { role: Role }) {
         <Outlet />
       </main>
       <BottomNav role={role} />
+      <AssistantLauncher role={role} />
     </div>
   )
 }

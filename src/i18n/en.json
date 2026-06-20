@@ -35,5 +35,21 @@
     "loading": "Loading...",
     "error": "Something went wrong",
     "comingSoon": "Coming soon"
+  },
+  "assistant": {
+    "title": "Darouna Assistant",
+    "subtitle": "Your account & how the app works",
+    "open": "Open assistant",
+    "close": "Close",
+    "clear": "Clear chat",
+    "send": "Send",
+    "placeholder": "Ask about your account…",
+    "greeting": "Hi {{name}}, I can help with your account and how to use Darouna. Ask me anything, or tap a question below.",
+    "error": "Sorry, I couldn't reach the assistant. Please try again.",
+    "examples": {
+      "resident": ["What do I owe right now?", "Show my payment history", "Any new announcements?"],
+      "gardien": ["What tasks do I have today?", "What's still in progress?", "Any new announcements?"],
+      "syndic": ["What's our collection rate?", "Any overdue charges?", "Show open complaints"]
+    }
   }
 }
