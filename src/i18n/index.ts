@@ -14,12 +14,23 @@ i18n
       fr: { translation: fr },
       ar: { translation: ar },
     },
-    fallbackLng: 'en',
+    fallbackLng: 'fr',
     detection: {
-      order: ['querystring', 'localStorage', 'navigator'],
+      order: ['querystring', 'localStorage'],
       lookupQuerystring: 'lang',
+      caches: ['localStorage'],
     },
     interpolation: { escapeValue: false },
   })
+
+// Keep <html lang> and text direction (RTL for Arabic) in sync with the language.
+function applyDocumentDir(lng: string) {
+  if (typeof document === 'undefined') return
+  document.documentElement.lang = lng
+  document.documentElement.dir = lng === 'ar' ? 'rtl' : 'ltr'
+}
+
+i18n.on('languageChanged', applyDocumentDir)
+applyDocumentDir(i18n.resolvedLanguage ?? 'fr')
 
 export default i18n

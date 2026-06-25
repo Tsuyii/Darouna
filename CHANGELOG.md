@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 2026-06-25 — Brand logo + language switcher on the welcome screen
+
+### Added
+- **`src/components/ui/LanguageSwitcher.tsx`** — reusable compact language dropdown (🌐 FR/EN/ع) with active-state checkmark; switches the app language and toggles `<html dir="rtl">` for Arabic. Placed top-right of the role-select header
+- **Real Darouna brand logo** — extracted the original logo from the PFA deck and re-coloured it into the app's emerald palette (gradient `#064E3B → #10B981`, white emblem). New `public/darouna-logo.png` (full lockup, rounded transparent corners) shown in the welcome header
+- **Favicon + PWA icons** — new `public/favicon.png` and regenerated all 10 `public/icons/icon-*.png` as the emerald emblem (no wordmark, legible at small sizes); `index.html` now points the favicon at `/favicon.png`. Replaces the leftover purple template icon
+
+### Changed
+- **Default language is now French** — `src/i18n/index.ts` `fallbackLng: 'fr'`, detection narrowed to `querystring → localStorage` (cached), and `<html lang/dir>` kept in sync on load + on every language change
+- **`RoleSelect.tsx` fully wired to i18n** — title, role names + descriptions, "current selection", CTA, help/footer text, and the signed-in banner now use `t()` so switching language actually translates the screen (previously hard-coded English)
+- **i18n strings** — added `roleSelect.*` keys (role descriptions, current selection, need-help/first-time/create-account, signed-in banner) in en/fr/ar
+
 ## 2026-06-20 — AI Assistant (Phase 5)
 
 ### Added

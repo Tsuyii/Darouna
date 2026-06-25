@@ -18,6 +18,19 @@
     "noAccount": "ليس لديك حساب؟",
     "haveAccount": "لديك حساب بالفعل؟"
   },
+  "roleSelect": {
+    "syndicDesc": "إدارة شؤون المبنى والمالية",
+    "residentDesc": "الوصول إلى تفاصيل سكنك والخدمات",
+    "gardienDesc": "مراقبة سلامة المبنى والدخول",
+    "currentSelection": "الاختيار الحالي",
+    "needHelp": "تحتاج مساعدة؟",
+    "firstTime": "زيارتك الأولى؟",
+    "createAccount": "إنشاء حساب",
+    "signedInAs": "مسجّل الدخول كـ {{role}}",
+    "switchHint": "ارجع أو سجّل الدخول بحساب آخر",
+    "goDashboard": "اذهب إلى لوحة التحكم",
+    "signOut": "تسجيل الخروج"
+  },
   "nav": {
     "dash": "الرئيسية",
     "units": "الوحدات",

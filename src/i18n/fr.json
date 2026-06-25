@@ -18,6 +18,19 @@
     "noAccount": "Pas de compte ?",
     "haveAccount": "Déjà un compte ?"
   },
+  "roleSelect": {
+    "syndicDesc": "Gérez la copropriété et les finances",
+    "residentDesc": "Accédez à votre logement et aux services",
+    "gardienDesc": "Surveillez la sécurité et les accès",
+    "currentSelection": "Sélection actuelle",
+    "needHelp": "Besoin d'aide ?",
+    "firstTime": "Première visite ?",
+    "createAccount": "Créer un compte",
+    "signedInAs": "Connecté en tant que {{role}}",
+    "switchHint": "Revenez en arrière ou connectez-vous avec un autre compte",
+    "goDashboard": "Aller au tableau de bord",
+    "signOut": "Se déconnecter"
+  },
   "nav": {
     "dash": "Accueil",
     "units": "Unités",

@@ -1,18 +1,21 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useAuthStore } from '../../store/authStore'
+import LanguageSwitcher from '../../components/ui/LanguageSwitcher'
 
 type Role = 'syndic' | 'resident' | 'gardien'
 
-const ROLES: { id: Role; icon: string; title: string; desc: string }[] = [
-  { id: 'syndic',   icon: 'business_center', title: 'Syndic',   desc: 'Manage community affairs and finances' },
-  { id: 'resident', icon: 'home',            title: 'Resident', desc: 'Access your home details and services' },
-  { id: 'gardien',  icon: 'security',        title: 'Gardien',  desc: 'Monitor facility safety and access' },
+const ROLES: { id: Role; icon: string; descKey: string }[] = [
+  { id: 'syndic',   icon: 'business_center', descKey: 'roleSelect.syndicDesc' },
+  { id: 'resident', icon: 'home',            descKey: 'roleSelect.residentDesc' },
+  { id: 'gardien',  icon: 'security',        descKey: 'roleSelect.gardienDesc' },
 ]
 
 export default function RoleSelect() {
   const [selected, setSelected] = useState<Role>('resident')
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const { isAuthenticated, role, isLoading, logout } = useAuthStore()
 
   if (isLoading) {
@@ -30,10 +33,18 @@ export default function RoleSelect() {
       <div className="fixed bottom-0 left-0 -z-10 w-1/4 h-1/3 bg-tertiary-container/5 rounded-tr-full blur-[100px]" />
 
       {/* Header */}
-      <header className="w-full flex justify-center pt-12 pb-8">
+      <header className="relative w-full flex justify-center pt-12 pb-8">
+        {/* Language switcher — top right */}
+        <div className="absolute top-6 end-6">
+          <LanguageSwitcher />
+        </div>
+        {/* Logo */}
         <div className="flex flex-col items-center gap-2">
-          <span className="text-3xl font-black text-primary tracking-tighter font-headline">Darouna</span>
-          <div className="h-1 w-8 bg-gradient-to-r from-[#064E3B] to-[#10B981] rounded-full" />
+          <img
+            src="/darouna-logo.png"
+            alt="Darouna"
+            className="h-20 w-20 rounded-[22%] shadow-[0_14px_34px_rgba(6,78,59,0.28)]"
+          />
         </div>
       </header>
 
@@ -45,8 +56,8 @@ export default function RoleSelect() {
             <div className="flex items-center gap-3">
               <span className="material-symbols-outlined text-primary">account_circle</span>
               <div>
-                <p className="text-xs font-bold text-on-surface">You're signed in as <span className="text-primary capitalize">{role}</span></p>
-                <p className="text-[10px] text-on-surface-variant">Go back or sign in with a different account</p>
+                <p className="text-xs font-bold text-on-surface">{t('roleSelect.signedInAs', { role: t(`roles.${role}`) })}</p>
+                <p className="text-[10px] text-on-surface-variant">{t('roleSelect.switchHint')}</p>
               </div>
             </div>
             <div className="flex flex-col gap-1.5 shrink-0">
@@ -54,13 +65,13 @@ export default function RoleSelect() {
                 onClick={() => navigate(`/${role}`, { replace: true })}
                 className="text-[10px] font-bold text-primary hover:underline whitespace-nowrap"
               >
-                Go to dashboard
+                {t('roleSelect.goDashboard')}
               </button>
               <button
                 onClick={() => logout()}
                 className="text-[10px] font-bold text-error hover:underline"
               >
-                Sign out
+                {t('roleSelect.signOut')}
               </button>
             </div>
           </div>
@@ -69,10 +80,10 @@ export default function RoleSelect() {
         {/* Headline */}
         <div className="text-center mb-16 space-y-3">
           <h1 className="text-4xl md:text-5xl font-extrabold text-on-background font-headline tracking-tight">
-            Welcome to Darouna
+            {t('auth.welcome')}
           </h1>
           <p className="text-on-surface-variant font-medium text-lg">
-            Please select your role to continue to your sanctuary
+            {t('auth.selectRole')}
           </p>
         </div>
 
@@ -94,11 +105,11 @@ export default function RoleSelect() {
                     {r.icon}
                   </span>
                 </div>
-                <h3 className="text-xl font-bold font-headline text-white">{r.title}</h3>
-                <p className="text-sm text-white/80 mt-2 text-center">{r.desc}</p>
+                <h3 className="text-xl font-bold font-headline text-white">{t(`roles.${r.id}`)}</h3>
+                <p className="text-sm text-white/80 mt-2 text-center">{t(r.descKey)}</p>
                 <div className="mt-6 px-4 py-1 bg-white/20 backdrop-blur-md rounded-full border border-white/30">
                   <span className="text-[10px] uppercase tracking-widest font-bold text-white">
-                    Current Selection
+                    {t('roleSelect.currentSelection')}
                   </span>
                 </div>
               </button>
@@ -111,8 +122,8 @@ export default function RoleSelect() {
                 <div className="w-16 h-16 rounded-full bg-surface-container-low flex items-center justify-center mb-6 text-primary">
                   <span className="material-symbols-outlined text-3xl">{r.icon}</span>
                 </div>
-                <h3 className="text-xl font-bold font-headline text-on-surface">{r.title}</h3>
-                <p className="text-sm text-on-surface-variant mt-2 text-center">{r.desc}</p>
+                <h3 className="text-xl font-bold font-headline text-on-surface">{t(`roles.${r.id}`)}</h3>
+                <p className="text-sm text-on-surface-variant mt-2 text-center">{t(r.descKey)}</p>
               </button>
             )
           )}
@@ -124,23 +135,23 @@ export default function RoleSelect() {
             onClick={() => navigate(`/login/${selected}`)}
             className="w-full py-4 px-6 bg-gradient-to-r from-[#064E3B] to-[#10B981] text-white font-bold rounded-xl shadow-lg shadow-emerald-900/20 glass-glow hover:brightness-110 transition-all duration-300 flex items-center justify-center gap-3"
           >
-            Continue as {ROLES.find((r) => r.id === selected)?.title}
+            {t('auth.continueAs', { role: t(`roles.${selected}`) })}
             <span className="material-symbols-outlined">arrow_forward</span>
           </button>
           <div className="flex items-center justify-center mt-8 gap-4">
             <div className="h-[1px] flex-grow bg-outline-variant/20" />
             <span className="text-xs uppercase tracking-widest font-bold text-on-surface-variant/50">
-              Need Help?
+              {t('roleSelect.needHelp')}
             </span>
             <div className="h-[1px] flex-grow bg-outline-variant/20" />
           </div>
           <p className="text-center mt-6 text-sm font-medium text-on-surface-variant">
-            First time here?{' '}
+            {t('roleSelect.firstTime')}{' '}
             <button
               onClick={() => navigate(`/register/${selected}`)}
               className="text-primary font-bold hover:underline"
             >
-              Create an account
+              {t('roleSelect.createAccount')}
             </button>
           </p>
         </div>

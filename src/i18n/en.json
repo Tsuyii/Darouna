@@ -18,6 +18,19 @@
     "noAccount": "Don't have an account?",
     "haveAccount": "Already have an account?"
   },
+  "roleSelect": {
+    "syndicDesc": "Manage community affairs and finances",
+    "residentDesc": "Access your home details and services",
+    "gardienDesc": "Monitor facility safety and access",
+    "currentSelection": "Current Selection",
+    "needHelp": "Need Help?",
+    "firstTime": "First time here?",
+    "createAccount": "Create an account",
+    "signedInAs": "You're signed in as {{role}}",
+    "switchHint": "Go back or sign in with a different account",
+    "goDashboard": "Go to dashboard",
+    "signOut": "Sign out"
+  },
   "nav": {
     "dash": "Dash",
     "units": "Units",
